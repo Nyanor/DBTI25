@@ -9,7 +9,6 @@ public class JDBC {
     private static final String PASS = "password";
 
     public static void main(String[] args) {
-
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             System.out.println("Connected to the database successfully!");
 
@@ -22,7 +21,6 @@ public class JDBC {
             e.printStackTrace();        
         }
     }
-
 
     public static void createHendrikKrause(Connection conn) {
         String statement = "INSERT INTO personal (pnr, name, vorname, geh_stufe, abt_nr, krankenkasse) VALUES (?, ?, ?, ?, ?, ?)";
@@ -88,4 +86,11 @@ public class JDBC {
         }
     }
 
+    public static void JDBCMigrate(Connection conn) {
+        try (Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS krankenversicherung (kkid INT PRIMARY KEY, kuerzel VARCHAR(3) UNIQUE, name VARCHAR(100))");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }        
+    }
 }
